@@ -1,0 +1,28 @@
+# docker-compose up
+
+version: '3.9'
+
+services:
+  web:
+    image: nginx:latest
+    container_name: mynginx
+    ports:
+      - '8000:80'
+    volumes:
+      - ./src:/usr/share/nginx/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - php_default
+
+  php-fpm:
+    image: myphp-fpm
+    container_name: myphp_fpm
+    volumes:
+      - ./src:/usr/share/nginx/html
+    networks:
+      - php_default
+
+networks:
+  php_default:
+    name: php_default
+    driver: bridge

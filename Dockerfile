@@ -1,10 +1,11 @@
 # docker build -t mynginx .
-FROM nginx:latest
+
+# FROM nginx:latest
 
 ## localhost
-COPY default.conf /etc/nginx/conf.d/
-COPY 404.html /usr/share/nginx/html/
-COPY 500.html /usr/share/nginx/html/
+# COPY default.conf /etc/nginx/conf.d/
+# COPY 404.html /usr/share/nginx/html/
+# COPY 500.html /usr/share/nginx/html/
 
 ## http://it-connect.tech:8000/ NE FONCTION PAS
 # RUN mkdir -p /usr/share/nginx/it-connect.tech

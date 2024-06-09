@@ -1,0 +1,31 @@
+# cat /etc/nginx/sites-available/it-connect.tech
+# cat /etc/nginx/sites-enabled/it-connect.tech
+server {
+
+   listen       80;
+   listen  [::]:80;
+
+   # Déclaration du nom de domaine
+   server_name it-connect.tech www.it-connect.tech;
+
+   location / {
+      # La racine de ce site
+      root   /usr/share/nginx/it-connect.tech/;
+      # Noms des pages par défaut 
+      index  index.html index.htm;
+      # La directive "try_files" suivie de $uri et $uri/ cherche à vérifier l'existence du fichier ou dossier (d'où le "/") passé en paramètre dans l'URL.
+      try_files $uri $uri/ =404;
+   }
+
+   # redirect server error pages to the static page /404.html
+   error_page  404              /404.html;
+   location = /404.html {
+      root   /usr/share/nginx/it-connect.tech/;
+   }
+
+   # redirect server error pages to the static page /500.html
+   error_page   500 502 503 504  /500.html;
+   location = /500.html {
+      root   /usr/share/nginx/it-connect.tech/;
+   }
+}
