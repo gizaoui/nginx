@@ -7,6 +7,10 @@
 
 ## docker-compose
 
+apt update && apt-get install -y postgresql-client
+PGPASSWORD='postgres' psql -h basic-postgres -U postgres -d mydb
+
+
 Le fichier de configuration *docker-compose.yaml* utilise l'image de façon direct (sans *Dockerfile*).<br>
 Installer le client *Postgres* sur le machine hôte (`apt-cache search postgresql-client-*`)
 

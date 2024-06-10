@@ -20,7 +20,10 @@ services:
       - ./data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
+    networks:
+      - php_default
     # shm_size: 128mb
+
 
   ##########################################
   #                 NGINX
