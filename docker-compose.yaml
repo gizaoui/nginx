@@ -3,26 +3,54 @@
 version: '3.9'
 
 services:
-  web:
+
+  ##########################################
+  #                POSTGRES
+  ##########################################
+  postgres:
+    image: postgres:14.1-alpine
+    container_name: basic-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    # shm_size: 128mb
+
+  ##########################################
+  #                 NGINX
+  ##########################################
+  nginx:
     image: nginx:latest
     container_name: mynginx
     ports:
       - '8000:80'
     volumes:
-      - ./src:/usr/share/nginx/html
+      - ./html:/usr/share/nginx/html
       - ./default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - php_default
 
+  ##########################################
+  #                 PHP
+  ##########################################
   php-fpm:
-    image: myphp-fpm
+    build:
+      context: .
     container_name: myphp_fpm
     volumes:
-      - ./src:/usr/share/nginx/html
+      - ./html:/usr/share/nginx/html
     networks:
       - php_default
+
 
 networks:
   php_default:
     name: php_default
     driver: bridge
+

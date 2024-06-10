@@ -1,5 +1,0 @@
-
-# docker build -t mynginx -f dockerfile_nginx .
-
-FROM nginx:latest
-COPY default.conf /etc/nginx/conf.d/

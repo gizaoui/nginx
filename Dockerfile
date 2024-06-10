@@ -1,17 +1,24 @@
-# docker build -t mynginx .
+# docker build -t myphp-fpm .
 
-# FROM nginx:latest
+FROM php:7.4-fpm
 
-## localhost
-# COPY default.conf /etc/nginx/conf.d/
-# COPY 404.html /usr/share/nginx/html/
-# COPY 500.html /usr/share/nginx/html/
+RUN apt-get -y update && apt-get install -y libssl-dev pkg-config libzip-dev unzip git \
+locales curl wget mlocate tree gnupg gcc make autoconf libc-dev libpq-dev libonig-dev
 
-## http://it-connect.tech:8000/ NE FONCTION PAS
-# RUN mkdir -p /usr/share/nginx/it-connect.tech
-# COPY index.html /usr/share/nginx/it-connect.tech/
-# RUN mkdir -p /etc/nginx/sites-available
-# RUN mkdir -p /etc/nginx/sites-enabled
-# COPY it-connect.tech /etc/nginx/sites-available/
-# RUN ln -s /etc/nginx/sites-available/it-connect.tech /etc/nginx/sites-enabled/it-connect.tech
-# RUN apt update -y && apt -y install lsb-release apt-transport-https ca-certificates postgresql-client
+RUN pecl install zlib zip && docker-php-ext-enable zip
+
+RUN docker-php-ext-install pgsql
+RUN docker-php-ext-install mbstring
+
+# set locale to utf-8
+RUN echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+ENV LANG='fr_FR.UTF-8' LANGUAGE='fr_FR:en' LC_ALL='fr_FR.UTF-8'
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+RUN echo "date.timezone=Europe/Paris" >> /usr/local/etc/php/php.ini
+
+EXPOSE 9000
+CMD ["php-fpm"]
