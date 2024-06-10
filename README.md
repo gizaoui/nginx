@@ -2,14 +2,12 @@
 
 ## docker
 
-- Pull & launch : `docker run --name basic-postgres --rm -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e PGDATA=/var/lib/postgresql/data/pgdata/pgdata --volume /tmp:/var/lib/postgresql/data/pgdata -p 5432:5432 -it postgres:14.1-alpine`
+
+- Pull & launch : `docker run --name basic-postgres --rm -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e PGDATA=/var/lib/postgresql/data/pgdata/pgdata --volume ./data:/var/lib/postgresql/data/pgdata -p 5432:5432 -it postgres:14.1-alpine`
+
 - Liste des points de montage : `docker inspect basic-postgres | jq '.[]' | jq '.Mounts[]'`
 
 ## docker-compose
-
-apt update && apt-get install -y postgresql-client
-PGPASSWORD='postgres' psql -h basic-postgres -U postgres -d mydb
-
 
 Le fichier de configuration *docker-compose.yaml* utilise l'image de façon direct (sans *Dockerfile*).<br>
 Installer le client *Postgres* sur le machine hôte (`apt-cache search postgresql-client-*`)
@@ -27,6 +25,43 @@ Installer le client *Postgres* sur le machine hôte (`apt-cache search postgresq
 - Liste des bases de données : `\l+`
 - Liste des tables : `\dt+`
 - Détail d'une table : `\d+ users`
+
+
+### Configuration
+
+***pg_hba.conf***
+
+```shell
+local   all             all                                     trust
+host    all             all             127.0.0.1/32            trust
+host    all             all             ::1/128                 trust
+local   replication     all                                     trust
+host    replication     all             127.0.0.1/32            trust
+host    replication     all             ::1/128                 trust
+host all all all scram-sha-256
+```
+
+
+***postgresql.conf***
+
+```shell
+listen_addresses = '*'
+max_connections = 100                   # (change requires restart)
+shared_buffers = 128MB                  # min 128kB
+dynamic_shared_memory_type = posix      # the default is the first option
+max_wal_size = 1GB
+min_wal_size = 80MB
+log_timezone = 'UTC'
+datestyle = 'iso, mdy'
+timezone = 'UTC'
+lc_messages = 'en_US.utf8'                      # locale for system error message
+lc_monetary = 'en_US.utf8'                      # locale for monetary formatting
+lc_numeric = 'en_US.utf8'                       # locale for number formatting
+lc_time = 'en_US.utf8'                          # locale for time formatting
+default_text_search_config = 'pg_catalog.english'
+```
+
+
 
 ### Montage de volume (*./data*)
 
@@ -47,4 +82,3 @@ Installer le client *Postgres* sur le machine hôte (`apt-cache search postgresq
 - [nginx en tant que serveur web](https://www.it-connect.fr/debian-comment-installer-nginx-en-tant-que-serveur-web/)
 - [nginx & php:7.4-fpm](https://gist.github.com/DanRibbens/f99147436b6f3ed270cd27a30519effc)
 
-docker build -t myphp-fpm -f dockerfile_php_fpm . && docker build -t mynginx -f dockerfile_nginx . && docker-compose up

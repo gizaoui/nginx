@@ -3,27 +3,6 @@
 version: '3.9'
 services:
 
-  ##########################################
-  #                POSTGRES
-  ##########################################
-  postgres:
-    image: postgres:14.1-alpine
-    container_name: basic-postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mydb
-      PGDATA: /var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: always
-    networks:
-      - php_default
-    # shm_size: 128mb
-
 
   ##########################################
   #                 NGINX
@@ -32,13 +11,10 @@ services:
     image: nginx:latest
     container_name: mynginx
     volumes:
-      - ./phppgadmin:/usr/share/nginx/phppgadmin
+      - ./html:/usr/share/nginx/html
       - ./default.conf:/etc/nginx/conf.d/default.conf
     networks:
-      - php_default
-    ## Accès de l'exterieur du 'container'
-    # apt update && apt-get install -y postgresql-client
-    # PGPASSWORD='postgres' psql -h basic-postgres -U postgres -d mydb
+      - common_network
     ports:
       - '8000:80'
 
@@ -48,14 +24,16 @@ services:
   php-fpm:
     build:
       context: .
+    ## Mettre à jour le fichier 'default.conf'
+    # -> fastcgi_pass myphp_fpm:9000;
     container_name: myphp_fpm
     volumes:
-      - ./phppgadmin:/usr/share/nginx/phppgadmin
+      - ./html:/usr/share/nginx/html
     networks:
-      - php_default
+      - common_network
 
 networks:
-  php_default:
-    name: php_default
+  common_network:
+    name: common_network
     driver: bridge
 
