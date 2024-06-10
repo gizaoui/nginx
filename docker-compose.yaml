@@ -22,8 +22,7 @@ services:
   #                 PHP
   ##########################################
   php-fpm:
-    build:
-      context: .
+    image: php:7.4-fpm
     ## Mettre à jour le fichier 'default.conf'
     # -> fastcgi_pass myphp_fpm:9000;
     container_name: myphp_fpm
