@@ -31,6 +31,25 @@ services:
     networks:
       - common_network
 
+  ##########################################
+  #                 TOMCAT
+  ##########################################
+  tomcat:
+    # docker exec -it mytomcat /bin/bash
+    image: tomcat:10.1
+    container_name: mytomcat
+    volumes:
+      - ./webapps:/usr/local/tomcat/webapps
+
+
+    networks:
+      - common_network
+    ports:
+      - '8080:8080'
+
+
+
+
 networks:
   common_network:
     name: common_network
