@@ -9,11 +9,21 @@
 Exploitation des API via redirection *NGINX* (`location ~ /mypath/(.*)$`)
 
 ```bash
-curl -X 'POST' 'localhost:8000/mypath/test-junit/save' \
-  -H 'accept: */*'-H 'Content-Type: application/json' 
-  -d '{"lastName": "ZAOUI", "firstName": "Gilles"}'
+curl -X 'POST' 'http://localhost:8000/mypath/test-junit/save' \
+  -H 'accept: */*' -H 'Content-Type: application/json' \
+  -d '{"lastName": "ZAOUI", "firstName": "Gilles" }'
 
-curl -X 'GET' 'localhost:8000/mypath/test-junit/all' -H 'accept: */*'
+curl -X 'GET' 'http://localhost:8000/mypath/test-junit/all' -H 'accept: */*'
+```
+
+Exploitation des API via le *Virtual host* *example.com*
+
+```bash
+curl -X 'POST' 'http://example.com:8080/test-junit/save' \
+  -H 'accept: */*' -H 'Content-Type: application/json' \
+  -d '{"lastName": "ZAOUI", "firstName": "Gilles" }'
+
+curl -X 'GET' 'http://example.com:8000/test-junit/all' -H 'accept: */*'
 ```
 
 Le *swagger-ui* ne fonctionne pas à travers les *containers*
