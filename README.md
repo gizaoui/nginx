@@ -16,6 +16,9 @@ curl -X 'POST' 'localhost:8000/mypath/test-junit/save' \
 curl -X 'GET' 'localhost:8000/mypath/test-junit/all' -H 'accept: */*'
 ```
 
+Le *swagger-ui* ne fonctionne pas à travers les *containers*
+
+
 ### Liens
 
 - [nginx en tant que serveur web](https://www.it-connect.fr/debian-comment-installer-nginx-en-tant-que-serveur-web/)
