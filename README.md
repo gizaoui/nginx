@@ -6,6 +6,16 @@
 - Test des fichiers de configuration : `nginx -t`
 
 
+Exploitation des API via redirection *NGINX* (`location ~ /mypath/(.*)$`)
+
+```bash
+curl -X 'POST' 'localhost:8000/mypath/test-junit/save' \
+  -H 'accept: */*'-H 'Content-Type: application/json' 
+  -d '{"lastName": "ZAOUI", "firstName": "Gilles"}'
+
+curl -X 'GET' 'localhost:8000/mypath/test-junit/all' -H 'accept: */*'
+```
+
 ### Liens
 
 - [nginx en tant que serveur web](https://www.it-connect.fr/debian-comment-installer-nginx-en-tant-que-serveur-web/)
@@ -19,3 +29,5 @@
 
 - https://book.hacktricks.xyz/network-services-pentesting/8009-pentesting-apache-jserv-protocol-ajp
 - https://book.hacktricks.xyz/v/fr/network-services-pentesting/8009-pentesting-apache-jserv-protocol-ajp
+
+
