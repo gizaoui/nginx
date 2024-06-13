@@ -19,14 +19,15 @@ curl -X 'GET' 'http://localhost:8000/mypath/test-junit/all' -H 'accept: */*'
 Exploitation des API via le *Virtual host* *example.com*
 
 ```bash
-curl -X 'POST' 'http://example.com:8080/test-junit/save' \
+curl -X 'POST' 'http://example.com:8000/test-junit/save' \
   -H 'accept: */*' -H 'Content-Type: application/json' \
   -d '{"lastName": "ZAOUI", "firstName": "Gilles" }'
 
 curl -X 'GET' 'http://example.com:8000/test-junit/all' -H 'accept: */*'
 ```
 
-Le *swagger-ui* ne fonctionne pas à travers les *containers*
+Le *swagger-ui* ne fonctionne pas à travers les *containers*.<br>
+Uniquement sur la [redirection](http://localhost:8080/test-junit/swagger-ui/index.html) des ports.
 
 
 ### Liens

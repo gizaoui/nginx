@@ -1,33 +1,186 @@
-<!DOCTYPE html>
-<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-   <title>Welcome to nginx!</title>
-   <style>
-      html {
-         color-scheme: light dark;
-      }
+    <title>Generate token</title>
+    <style>
+        body {
+            margin: 0;
+        }
 
-      body {
-         width: 35em;
-         margin: 0 auto;
-         font-family: Tahoma, Verdana, Arial, sans-serif;
-      }
-   </style>
+        div.main {
+            padding: 1em;
+        }
+
+        input[type="text"] {
+            font-size: 10px;
+        }
+
+        input[type="button"] {
+            text-align: center;
+            display: inline-block;
+            font-size: 10px;
+        }
+
+        a:link {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        div.title {
+            margin-bottom: 1em;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            background-color: #f2f2f2;
+            text-align: center
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #error {
+            color: red;
+        }
+    </style>
+
+    <script type="text/javascript">
+        const host = "http://localhost:8000"
+        const urlApi = host + "/mypath/test-junit" /* http://localhost:8080/test-junit/swagger-ui/index.html */
+        // const urlApi = host + ""
+    </script>
+
 </head>
 
-<body>
-   <h1>Welcome to nginx!</h1>
-   <p>If you see this page, the nginx web server is successfully installed and
-      working. Further configuration is required.</p>
+<body onload="init()">
 
-   <p>For online documentation and support please refer to
-      <a href="http://nginx.org/">nginx.org</a>.<br />
-      Commercial support is available at
-      <a href="http://nginx.com/">nginx.com</a>.
-   </p>
+   <!--
+   curl -X 'POST' \
+  'http://localhost:8080/test-junit/save' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "lastName": "ZAOUI",
+  "firstName": "Gilles"
+}'
+   -->
 
-   <p><em>Thank you for using nginx.</em></p>
+    <div class="title">
+        <h1> 
+            <input type="button" value="/save" onclick='httpQry(urlApi + "/save", JSON.stringify({
+                    lastName: "ZAOUI",
+                    firstName: "Gilles"
+                }))' />
+        </h1>
+    </div>
+
+    <div class="main">
+        
+        <div style="overflow-x: auto;">
+            <table id="myTable">
+            </table>
+        </div>
+
+        <div id="error">
+        </div>
+
+        <script type="text/javascript">
+
+            function init() {
+               /*
+                if (event.currentTarget.performance.navigation.type == 0) { // Not refresh
+                    if (code != null) {
+                        document.getElementById("storeCode").value = code
+                    }
+                    else {
+                        console.log(scConnect)
+                    }
+                }
+                    */
+            }
+
+            function clearErr() {
+                document.getElementById("error").innerHTML = ""
+            }
+
+            function clearCode() {
+                document.getElementById("storeCode").value = ""
+            }
+
+            function clearToken() {
+                clearErr();
+                document.getElementById("storeToken").value = ""
+            }
+
+            function clearTable() {
+                clearErr();
+                var table = document.getElementById("myTable");
+                table.innerHTML = "";
+            }
+
+            function httpQry(url, body) {
+
+                clearErr();
+
+                const invocation = new XMLHttpRequest();
+                if (invocation) {
+                    invocation.open('POST', url, true);
+                    invocation.setRequestHeader('X-PINGOTHER', 'pingpong');
+                    invocation.setRequestHeader('Content-Type', 'application/json');
+                    invocation.setRequestHeader('accept', '*/*');
+            
+                    if (body == undefined) {
+                        invocation.send();
+                    }
+                    else {
+                        invocation.send(body);
+                    }
+
+                    invocation.onload = function () {
+                        if (invocation.status == 200) {
+                            console.log(invocation.response)
+                            
+                        } else {
+                            // clearToken();
+                            // clearTable();
+                            if (JSON.parse(invocation.responseText).error != undefined) {
+                                document.getElementById("error").innerHTML = invocation.response = JSON.parse(invocation.response).error;
+                            }
+                            else {
+                                alert("Erreur " + invocation.status + " : " + invocation.statusText + " (" + invocation.response + ")");
+                            }
+                        }
+                    };
+
+                    invocation.onprogress = function (event) {
+                        if (event.lengthComputable) {
+                            console.log(event.loaded + " octets reçus sur un total de " + event.total);
+                        }
+                    };
+
+                    invocation.onerror = function () {
+                        alert("La requête a échoué");
+                    };
+                }
+            }
+
+        </script>
+    </div>
 </body>
 
 </html>
