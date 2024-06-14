@@ -28,6 +28,8 @@ services:
     image: postgres:14.1-alpine
     ## Mettre à jour le fichier 'phppgadmin/conf/config.inc.php'
     # -> $conf['servers'][0]['host'] = 'mypostgres';
+    ## Mettre à jour le fichier 'resources/application.properties'
+    # spring.datasource.url=jdbc:postgresql://mypostgres:5432/mydb
     container_name: mypostgres
     environment:
       POSTGRES_USER: postgres
