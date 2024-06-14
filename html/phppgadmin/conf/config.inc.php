@@ -1,6 +1,6 @@
 <?php
 	
-	$conf['servers'][0]['host'] = 'basic-postgres';
+	$conf['servers'][0]['host'] = 'mypostgres';
 	$conf['servers'][0]['port'] = 5432;
 	$conf['extra_login_security'] = false;
 

@@ -3,14 +3,30 @@
 version: '2.27.0'
 services:
 
+
+  ##########################################
+  #                 PHP
+  ##########################################
+  php-fpm:
+    build:
+      context: .
+    ## Mettre à jour le fichier 'default.conf'
+    # -> fastcgi_pass myphp_fpm:9000;
+    container_name: myphp_fpm
+    volumes:
+      - ./html:/usr/share/nginx/html
+    networks:
+      - common_network
+
+
   ##########################################
   #                POSTGRES
   ##########################################
   postgres:
     image: postgres:14.1-alpine
     ## Mettre à jour le fichier 'phppgadmin/conf/config.inc.php'
-    # -> $conf['servers'][0]['host'] = 'basic-postgres';
-    container_name: basic-postgres
+    # -> $conf['servers'][0]['host'] = 'mypostgres';
+    container_name: mypostgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -26,10 +42,27 @@ services:
     
     ## Accès de l'exterieur du 'container'
     # apt update && apt-get install -y postgresql-client
-    # PGPASSWORD='postgres' psql -h basic-postgres -U postgres -d mydb
+    # PGPASSWORD='postgres' psql -h mypostgres -U postgres -d mydb
     ports:
       - "5432:5432"
     # shm_size: 128mb
+
+
+  ##########################################
+  #                 TOMCAT
+  ##########################################
+  tomcat:
+    image: tomcat:10.1
+    container_name: mytomcat
+    depends_on :
+      - postgres
+    volumes:
+      - ./webapps:/usr/local/tomcat/webapps
+    networks:
+      - common_network
+    # http://localhost:8080/test-junit/swagger-ui/index.html
+    ports:
+      - '8080:8080'
 
 
   ##########################################
@@ -48,36 +81,6 @@ services:
       - common_network
     ports:
       - '8000:80'
-
-
-  ##########################################
-  #                 PHP
-  ##########################################
-  php-fpm:
-    build:
-      context: .
-    ## Mettre à jour le fichier 'default.conf'
-    # -> fastcgi_pass myphp_fpm:9000;
-    container_name: myphp_fpm
-    volumes:
-      - ./html:/usr/share/nginx/html
-    networks:
-      - common_network
-
-
-  ##########################################
-  #                 TOMCAT
-  ##########################################
-  tomcat:
-    image: tomcat:10.1
-    container_name: mytomcat
-    volumes:
-      - ./webapps:/usr/local/tomcat/webapps
-    networks:
-      - common_network
-    # http://localhost:8080/test-junit/swagger-ui/index.html
-    ports:
-      - '8080:8080'
 
 
 networks:
