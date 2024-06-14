@@ -5,15 +5,16 @@
 - Connexion au conteneur (`cd /usr/share/nginx/html`) : `docker exec -it mynginx /bin/bash`
 - Test des fichiers de configuration : `nginx -t`
 
+[phppgadmin](http://localhost:8000/phppgadmin/)
 
-Exploitation des API via redirection *NGINX* (`location ~ /mypath/(.*)$`)
+Exploitation des API via redirection *NGINX* (`location ~ /tomcat/(.*)$`)
 
 ```bash
-curl -X 'POST' 'http://localhost:8000/mypath/test-junit/save' \
+curl -X 'POST' 'http://localhost:8000/tomcat/test-junit/save' \
   -H 'accept: */*' -H 'Content-Type: application/json' \
   -d '{"lastName": "ZAOUI", "firstName": "Gilles" }'
 
-curl -X 'GET' 'http://localhost:8000/mypath/test-junit/all' -H 'accept: */*'
+curl -X 'GET' 'http://localhost:8000/tomcat/test-junit/all' -H 'accept: */*'
 ```
 
 Exploitation des API via le *Virtual host* *example.com*

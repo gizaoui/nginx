@@ -1,7 +1,36 @@
 # docker-compose up
 
-version: '3.9'
+version: '2.27.0'
 services:
+
+  ##########################################
+  #                POSTGRES
+  ##########################################
+  postgres:
+    image: postgres:14.1-alpine
+    ## Mettre à jour le fichier 'phppgadmin/conf/config.inc.php'
+    # -> $conf['servers'][0]['host'] = 'basic-postgres';
+    container_name: basic-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+      PGDATA: /var/lib/postgresql/data
+
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    networks:
+      - common_network
+    
+    ## Accès de l'exterieur du 'container'
+    # apt update && apt-get install -y postgresql-client
+    # PGPASSWORD='postgres' psql -h basic-postgres -U postgres -d mydb
+    ports:
+      - "5432:5432"
+    # shm_size: 128mb
+
 
   ##########################################
   #                 NGINX
@@ -21,12 +50,12 @@ services:
       - '8000:80'
 
 
-
   ##########################################
   #                 PHP
   ##########################################
   php-fpm:
-    image: php:7.4-fpm
+    build:
+      context: .
     ## Mettre à jour le fichier 'default.conf'
     # -> fastcgi_pass myphp_fpm:9000;
     container_name: myphp_fpm
@@ -34,6 +63,7 @@ services:
       - ./html:/usr/share/nginx/html
     networks:
       - common_network
+
 
   ##########################################
   #                 TOMCAT

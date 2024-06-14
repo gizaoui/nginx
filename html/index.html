@@ -61,24 +61,14 @@
 
     <script type="text/javascript">
         const host = "http://localhost:8000"
-        const urlApi = host + "/mypath/test-junit" /* http://localhost:8080/test-junit/swagger-ui/index.html */
-        // const urlApi = host + ""
+        const urlApi = host + "/tomcat/test-junit"
     </script>
 
 </head>
 
 <body onload="init()">
 
-   <!--
-   curl -X 'POST' \
-  'http://localhost:8080/test-junit/save' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "lastName": "ZAOUI",
-  "firstName": "Gilles"
-}'
-   -->
+
 
     <div class="title">
         <h1> 
@@ -153,8 +143,7 @@
 
                     invocation.onload = function () {
                         if (invocation.status == 200) {
-                            console.log(invocation.response)
-                            
+                            console.log(urlApi + " : " + invocation.response)
                         } else {
                             // clearToken();
                             // clearTable();
