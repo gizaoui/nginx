@@ -1,6 +1,7 @@
 # sudo \rm -fr data/ webapps/test-junit
 # docker-compose up
 
+
 version: '2.27.0'
 services:
 
