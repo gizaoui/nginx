@@ -56,12 +56,11 @@ services:
   #                 TOMCAT
   ##########################################
   tomcat:
-    image: tomcat:10.1
+    # https://hub.docker.com/repository/docker/gizaoui/junit/general
+    image: gizaoui/junit:1.0.0
     container_name: mytomcat
     depends_on :
       - postgres
-    volumes:
-      - ./webapps:/usr/local/tomcat/webapps
     networks:
       - common_network
     # http://localhost:8080/test-junit/swagger-ui/index.html
