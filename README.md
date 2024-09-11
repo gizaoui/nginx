@@ -31,7 +31,7 @@ curl -X 'GET' 'http://example.com:8000/test-junit/all' -H 'accept: */*'
 Le *swagger-ui* ne fonctionne pas à travers les *containers*.<br>
 Uniquement sur la [redirection](http://localhost:8080/test-junit/swagger-ui/index.html) des ports.
 
-
+<!--
 ### Liens
 
 - [nginx en tant que serveur web](https://www.it-connect.fr/debian-comment-installer-nginx-en-tant-que-serveur-web/)
@@ -52,3 +52,4 @@ Uniquement sur la [redirection](http://localhost:8080/test-junit/swagger-ui/inde
 
 
 - [phppgadmin](https://localhost:8443/phppgadmin/)
+-->
